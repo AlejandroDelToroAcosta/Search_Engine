@@ -7,45 +7,51 @@
 ---
 
 ## Description
-This project is designed as a search engine that connects to the Project Gutenberg web page and periodically downloads several books from it, saving them in a datalake. This functionality is implemented by the crawler module.
 
-Then the Indexer module reads the datalake books and creates two inverted index structures as two datamarts that will provide the information to the final user. In one hand it creates a json file and in the other hand it creates a connection to MongoDB database.
-Finally the runner module has the functionality of asking the user for a word to search in one of the two inverted indexes.
+This project implements a search engine that interacts with [Project Gutenberg](https://www.gutenberg.org/) to periodically download books, storing them in a local datalake. The functionality for retrieving and storing these books is handled by the **Crawler** module.
 
-Additionally the project includes a test module that uses benchmark techniques to compare which of the two inverted indexes is more optimal when the user makes the query and when the data form the datalake is indexed.
+Once the books are collected, the **Indexer** module processes the content and builds two types of inverted indexes, which serve as two datamarts: 
+1. **JSON-based Index**: A static file-based approach.
+2. **MongoDB-based Index**: A dynamic, scalable NoSQL database.
 
---- 
+The **Runner** module provides a user interface, enabling users to search for a specific word across the two inverted indexes. Users can choose whether to query the JSON-based or MongoDB-based index for their search.
+
+In addition, the project includes a **Benchmarking** module that compares the performance of both index types. It uses benchmark tests to evaluate:
+- Query execution time in both systems.
+- The efficiency of storing the inverted index in JSON versus MongoDB.
+
+---
 
 ## Resources
 
-  This project has been developed entirely using  Pycharm. PyCharm is an integrated development environment (IDE) specifically designed for programming in Python. It is developed by JetBrains and provides a comprehensive set of tools to help Python developers write, debug, test, and maintain their code more efficiently.
+This project was developed using the following tools:
 
-  To create one of this datamart structures we have used Mongodb which is a NoSQL database designed for handling large-scale data in a flexible, scalable, and high-performance manner. Unlike traditional relational databases (like MySQL or PostgreSQL), which store data in structured tables with predefined schemas, MongoDB stores data in a document-oriented format, allowing for greater flexibility in data models.
+- **[PyCharm](https://www.jetbrains.com/pycharm/)**: An integrated development environment (IDE) designed specifically for Python. It offers a wide range of features for efficient code writing, debugging, and testing.
+  
+- **[MongoDB](https://www.mongodb.com/)**: A NoSQL database used for its high performance and scalability in storing large datasets, such as the inverted index.
 
-  However the project is based in using the Gutenberg Project web page which is is a digital library that offers free access to a vast collection of public domain eBooks.
+- **[Pytest](https://docs.pytest.org/)**: A testing framework utilized to run benchmark tests that compare the performance of MongoDB and JSON for storing and querying inverted indexes.
 
-  This software uses pytest as a benchmark tool.
+- **[Project Gutenberg](https://www.gutenberg.org/)**: A digital library that provides free access to public domain eBooks, which are used as the data source for the search engine.
 
 ---
 
 ## Benchmarking Results
 
-![Pytest results](results)
+![Pytest Results](results)
 
-As we see in the picture MongoDB is extremely efficient for querying data (test test_user_query_Mongo), clearly outperforming JSON in the same operation.
-However, saving the inverted index in MongoDB (test test_save_inverted_index_Mongo) is much slower compared to any other operation, with a significantly higher average execution time than the JSON version.
+The benchmarking tests revealed the following insights:
 
-JSON is less efficient for both querying and saving overall, but it still outperforms MongoDB when saving the inverted index (test_save_inverted_index_Json).
-These results suggest that MongoDB is more suitable for fast queries, but when it comes to saving large amounts of data (like an inverted index), its performance might not be the best compared to handling JSON files.
-
-## Tools
-
-- [MongoDb](https://www.mongodb.com/)
-- [Pytest](https://docs.pytest.org/)
-- [GutenberProject](https://www.gutenberg.org/)
-
-
-
-
-
+- **Query Performance**: MongoDB significantly outperforms the JSON file in query execution (as seen in the `test_user_query_Mongo` benchmark). This makes MongoDB highly efficient for search queries, especially in large datasets.
   
+- **Storage Performance**: The process of saving the inverted index to MongoDB (`test_save_inverted_index_Mongo`) is slower than saving it to JSON. This suggests that while MongoDB excels at querying, it incurs a performance cost when handling bulk data inserts like inverted indexes.
+  
+- **Overall**: MongoDB is ideal for environments where fast query response times are critical. However, JSON may still be preferred in scenarios where the primary concern is minimizing the time spent storing data rather than querying it.
+
+---
+
+## Tools and Libraries
+
+- **[MongoDB](https://www.mongodb.com/)**: Used for building a scalable, document-oriented database for the inverted index.
+- **[Pytest](https://docs.pytest.org/)**: Employed for testing and benchmarking.
+- **[Project Gutenberg](https://www.gutenberg.org/)**: Source of the eBook data.
