@@ -30,10 +30,11 @@ Additionally the project includes a test module that uses benchmark techniques t
 
 ## Benchmarking Results
 
-![Pytest results](URL-de-la-imagen)
+![Pytest results](results)
 
 As we see in the picture MongoDB is extremely efficient for querying data (test test_user_query_Mongo), clearly outperforming JSON in the same operation.
 However, saving the inverted index in MongoDB (test test_save_inverted_index_Mongo) is much slower compared to any other operation, with a significantly higher average execution time than the JSON version.
+
 JSON is less efficient for both querying and saving overall, but it still outperforms MongoDB when saving the inverted index (test_save_inverted_index_Json).
 These results suggest that MongoDB is more suitable for fast queries, but when it comes to saving large amounts of data (like an inverted index), its performance might not be the best compared to handling JSON files.
 
